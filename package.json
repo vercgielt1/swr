@@ -92,7 +92,7 @@
     "build": "pnpm build-package _internal && pnpm build-package core && pnpm build-package infinite && pnpm build-package immutable && pnpm build-package mutation && pnpm build-package subscription",
     "build:e2e": "pnpm next build e2e/site",
     "build-package": "bunchee --cwd",
-    "attw": "attw --pack",
+    "attw": "attw --pack --ignore-rules cjs-only-exports-default",
     "types:check": "pnpm -r run types:check",
     "prepublishOnly": "pnpm clean && pnpm build",
     "publish-beta": "pnpm publish --tag beta",
