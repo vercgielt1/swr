@@ -1,43 +1,39 @@
 'use client'
-import useSWR from 'swr'
+import useSWR, { preload } from 'swr'
 import { Suspense, use, useEffect, useState } from 'react'
 
 const sleep = (time: number, data: string) =>
   new Promise<string>(resolve => {
-    // console.log('sleep', time, data)
     setTimeout(() => resolve(data), time)
   })
 
-//const a = (() => sleep(1000, 'a'))()
-// const b = (() => sleep(2000, 'b'))()
 const Bug = () => {
-  console.log('start')
-  useSWR('a', () => sleep(1000, 'a'), {
+  const a = use(preload('a', () => sleep(1000, 'a')))
+  const { data: b } = useSWR('b', () => sleep(2000, 'b'), {
     suspense: true
   })
-  console.log('a finished')
-  useSWR('b', () => sleep(2000, 'b'), {
-    suspense: true
-  })
-  console.log('b finished')
-  /*const resulta = use(a)
-  const resultb = use(b)*/
-  useState(true)
-  return null
+  useState(b)
+  return (
+    <div>
+      {a},{b}
+    </div>
+  )
 }
 
 const Comp = () => {
   const [loading, setLoading] = useState(true)
 
   // To prevent SSR
-  useEffect(() => setLoading(false), [])
+  useEffect(() => {
+    setLoading(false)
+  }, [])
 
   if (loading) {
     return <span>Loading...</span>
   }
   return (
     <Suspense fallback={<div> fetching </div>}>
-      <Bug />
+      <Bug></Bug>
     </Suspense>
   )
 }

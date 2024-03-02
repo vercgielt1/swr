@@ -709,6 +709,7 @@ export const useSWRHandler = <Data = any, Error = any>(
     const req = PRELOAD[key]
     if (!isUndefined(req)) {
       const promise = boundMutate(req)
+      console.log('here')
       use(promise)
     }
 
